@@ -9,6 +9,10 @@ import socket
 import sys
 import time
 import logging
+from typing import get_origin
+
+
+import logs
 
 HOST, PORT = '0.0.0.0', 5060
 rx_register = re.compile("^REGISTER")
@@ -38,8 +42,8 @@ rx_addr = re.compile("sip:([^ ;>$]*)")
 rx_code = re.compile("^SIP/2.0 ([^ ]*)")
 rx_invalid = re.compile("^192\.168")
 rx_invalid2 = re.compile("^10\.")
-#rx_cseq = re.compile("^CSeq:")
-#rx_callid = re.compile("Call-ID: (.*)$")
+rx_cseq = re.compile("^CSeq:")
+rx_callid = re.compile("Call-ID: (.*)$")
 #rx_rr = re.compile("^Record-Route:")
 rx_request_uri = re.compile("^([^ ]*) sip:([^ ]*) SIP/2.0")
 rx_route = re.compile("^Route:")
@@ -96,6 +100,14 @@ class UDPHandler(socketserver.BaseRequestHandler):
             if not rx_route.search(line):
                 data.append(line)
         return data
+
+    def getID(self):
+        for line in self.data:
+            md = rx_callid.search(line)
+            if md:
+                return md.group(1)
+        return "Unknown"
+                
     
     def addTopVia(self):
         branch= ""
@@ -275,6 +287,7 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 text = "\r\n".join(data)
                 socket.sendto(text.encode("utf-8") , claddr)
                 showtime()
+                logs.write(self.getID() + " --> INVITE : " + self.getOrigin() + " <--> " + self.getDestination())
                 logging.info("<<< %s" % data[0])
                 logging.debug("---\n<< server send [%d]:\n%s\n---" % (len(text),text))
             else:
@@ -322,6 +335,10 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 data.insert(1,recordroute)
                 text = "\r\n".join(data)
                 socket.sendto(text.encode("utf-8") , claddr)
+                if rx_bye.search(data[0]):
+                    logs.write(self.getID() + " --> BYE: ukoncenie hovoru : " + self.getOrigin() + " <--> " + self.getDestination())
+                if rx_cancel.search(data[0]):
+                    logs.write(self.getID() + " --> CANCEL: ukoncenie hovoru : " + self.getOrigin() + " <--> " + self.getDestination())
                 showtime()
                 logging.info("<<< %s" % data[0])
                 logging.debug("---\n<< server send [%d]:\n%s\n---" % (len(text),text))    
@@ -342,9 +359,15 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 #uprava SIP stavovych kodov
                 rozdelene = data[0].split(" ")
                 if rozdelene[1] == "486":
-                       data[0] = rozdelene[0] + " " + rozdelene[1] + " " + "Obsadene"
+                    data[0] = rozdelene[0] + " " + rozdelene[1] + " " + "Obsadene"
 
-                print(data[0])
+
+                if rozdelene[1] == "200":
+                    for line in data:
+                        if rx_cseq.search(line) and "INVITE" in line:
+                            logs.write(self.getID() + " --> 200 - hovor bol prijaty : " + self.getOrigin() + " <--> " + self.getDestination()) 
+                if rozdelene[1] == "486" or rozdelene[1] == "603":
+                     logs.write(self.getID() + " --> " + rozdelene[1] + " - hovor bol ukonceny :" + self.getOrigin() + " <--> " + self.getDestination())
 
                 text = "\r\n".join(data)
                 socket.sendto(text.encode("utf-8"),claddr)

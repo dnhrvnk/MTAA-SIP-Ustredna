@@ -5,10 +5,9 @@ import sys
 
 def vypisy():
     hostname = socket.gethostname()
-    print(hostname)
     ipaddress = socket.gethostbyname(hostname)
     if ipaddress == "127.0.0.1": ipaddress = sys.argv[1]
-    print(ipaddress)
+    print(hostname, ipaddress)
     return ipaddress
 
 def spustenie(ipaddress):

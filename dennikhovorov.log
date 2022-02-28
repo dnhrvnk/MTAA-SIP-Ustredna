@@ -1,0 +1,13 @@
+---- log -----
+02/26/2022 12:08:29 --> uQfotoG4Za_yhNo4EMPFvg.. --> INVITE : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:08:32 --> uQfotoG4Za_yhNo4EMPFvg.. --> 200 - hovor bol prijaty : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:08:40 --> uQfotoG4Za_yhNo4EMPFvg.. --> BYE: ukoncenie hovoru : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:08:49 --> QUvpA8kWo5UNnvQV7jmvBw.. --> INVITE : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:09:03 --> QUvpA8kWo5UNnvQV7jmvBw.. --> CANCEL: ukoncenie hovoru : dana@192.168.1.249 <--> 7777@192.168.1.249
+---- log -----
+02/26/2022 12:09:51 --> YXO81ta8dMMTJrP5Kzr6cg.. --> INVITE : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:09:54 --> YXO81ta8dMMTJrP5Kzr6cg.. --> 603 - hovor bol ukonceny :dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:10:01 --> fZPk6oyB3bALaA7cZr-LPQ.. --> INVITE : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:10:32 --> fZPk6oyB3bALaA7cZr-LPQ.. --> 486 - hovor bol ukonceny :dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:11:11 --> GsUwM6CSSPNJ1RSfiQAP2A.. --> INVITE : dana@192.168.1.249 <--> 7777@192.168.1.249
+02/26/2022 12:11:42 --> GsUwM6CSSPNJ1RSfiQAP2A.. --> 486 - hovor bol ukonceny :dana@192.168.1.249 <--> 7777@192.168.1.249
